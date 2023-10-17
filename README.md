@@ -15,7 +15,6 @@ CuPy has a concept of a current device, which is the default GPU device on which
 ```
 cp.cuda.runtime.getDevice()
 ```
-
 ***
 
 ## cupy.ndarray
@@ -27,3 +26,14 @@ CuPy is an open-source array library designed for harnessing GPU acceleration in
 x_cpu = np.array([1, 2, 3]) # allocate an ndarray in the main memory
 x_gpu = cp.array([1, 2, 3]) # allocate an ndarray in the GPU memory
 ```
+***
+
+## Multi-GPU Operations
+
+Unless specified, CuPy always assumes that the operations are performed on the currently active device (which is usually the device with the device index 0). To make use of multiple GPUs, we can use the  device context manage to switch between the devices.
+
+```
+with cp.cuda.Device(1):  # alloacte an ndarray in the gpu memory of the device with device index 1
+    x_on_gpu1 = cp.array([1, 2, 3, 4, 5])
+```
+
