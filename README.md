@@ -143,3 +143,12 @@ a_cp = b_cp * a_cp + 8
 e2 = cp.cuda.get_current_stream().record() # create and record the event
 ```
 
+Just like a *current device* CuPy also has a concept of *current streams*. CuPu by default launches all operation in the current stream. At the same time, CUDA device can have multiple streams and we can use a different stream from the default stream.  
+
+```
+s = cp.cuda.Stream()
+with s:
+   a_cp = cp.asarray(a_np)  # H2D transfer on stream s
+   b_cp = cp.sum(a_cp)      # kernel launched on stream s 
+```
+
