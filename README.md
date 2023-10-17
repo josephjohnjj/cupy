@@ -152,3 +152,12 @@ with s:
    b_cp = cp.sum(a_cp)      # kernel launched on stream s 
 ```
 
+***
+
+# References
+1. https://docs.cupy.dev/en/stable/user_guide/basic.html
+2. https://docs.cupy.dev/en/stable/user_guide/kernel.html
+3. https://docs.cupy.dev/en/stable/user_guide/cuda_api.html
+4. 
+
+
