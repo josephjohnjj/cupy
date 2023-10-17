@@ -97,7 +97,7 @@ element_diff = cp.ElementwiseKernel('float32 x, float32 y',
 ```
 
 ### Reduction Kernel
-Reduction operation is a computation where we reduce the elements of an array into a single result.  We can use it by defining four parts of the kernel code:
+Reduction operation is a computation where we reduce the elements of an array into a single result. In CuPy a reduction kernels can help with reduction operation. A reduction kernel un CuPy has four parts:
 
 1. Identity value: This value is used for the initial value of reduction.
 2. Mapping expression: It is used for the pre-processing of each element to be reduced.
@@ -115,3 +115,6 @@ reduction_kernel = cp.ReductionKernel(
     'reduction_kernel'  # kernel name
 )
 ```
+
+### Raw Kernel
+
