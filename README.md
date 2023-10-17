@@ -130,3 +130,16 @@ add_kernel = cp.RawKernel(r'''
     }''', 'my_add')
 ```
 
+***
+
+## Cuda Events and Cuda Streams
+
+CuPy also provide fucntionalities for creating streams and events. Data copies and kernel launches are enqueued onto the Current Stream, which can be queried via get_current_stream() and changed either by setting up a context manager.
+
+```
+e1 = cp.cuda.Event() # create an event
+e1.record() # Records an event on the stream
+a_cp = b_cp * a_cp + 8
+e2 = cp.cuda.get_current_stream().record() # create and record the event
+```
+
