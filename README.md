@@ -23,7 +23,7 @@ CuPy is an open-source array library designed for harnessing GPU acceleration in
 ``cupy.ndarray `` is akin to the ``numpy.ndarray ``. It is an array object that represents a multidimensional, homogeneous array of fixed-size items. This is the core of CuPy. A call to the ``numpy.array()`` allocates the data in the main memory, while a call to the ``cupy.array()`` allocates the data in the GPU memory. If no device is specified the memory gets allocated in the ``current`` device.
 
 ```
-x_cpu = np.array([1, 2, 3]) # allocate an ndarray in the main memory
+x_cpu = np.array([1, 2, 3]) # allocate an ndarray in the host memory
 x_gpu = cp.array([1, 2, 3]) # allocate an ndarray in the GPU memory
 ```
 ***
@@ -37,3 +37,18 @@ with cp.cuda.Device(1):  # alloacte an ndarray in the gpu memory of the device w
     x_on_gpu1 = cp.array([1, 2, 3, 4, 5])
 ```
 
+## Data Transfers
+
+In a normal CUDA workflow we have to allocate the memory on the GPU and then move the data to the GPU memory. In CuPy this is not required, the memory allocation and data movement can be done in a single operation.
+
+```
+x_cpu = np.array([1, 2, 3])
+x_gpu_0 = cp.asarray(x_cpu)  # move the ndarray from host mem to GPU0 memeory.
+```
+
+We can also transfer data between GPUs. 
+```
+with cp.cuda.Device(1):
+    x_gpu_1 = cp.asarray(x_gpu_0)  # move the ndarray to GPU0 to GPU1.
+```
+In the past any communication between two GPUs had to go throgh the PCIe card. But now NVIDIA offeres a technology called NVLink. NVLink is a direct GPU-to-GPU interconnect that scales multi-GPU input/output (IO) within a node. This makes GPU-to-GPU transfer (D2D tranfer) much faster than GPU-to-Host (D2H transfer) or Host-to-GPU transfer (H2D transfer). 
