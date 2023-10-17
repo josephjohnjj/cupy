@@ -23,7 +23,7 @@ CuPy is an open-source array library designed for harnessing GPU acceleration in
 ``cupy.ndarray `` is akin to the ``numpy.ndarray ``. It is an array object that represents a multidimensional, homogeneous array of fixed-size items. This is the core of CuPy. A call to the ``numpy.array()`` allocates the data in the main memory, while a call to the ``cupy.array()`` allocates the data in the GPU memory. If no device is specified the memory gets allocated in the ``current`` device.
 
 ```
-x_cpu = np.array([1, 2, 3]) # allocate an ndarray in the host memory
+x_cpu = np.array([1, 2, 3]) # allocate an ndarray in the Host memory
 x_gpu = cp.array([1, 2, 3]) # allocate an ndarray in the GPU memory
 ```
 ***
@@ -43,7 +43,7 @@ In a normal CUDA workflow we have to allocate the memory on the GPU and then mov
 
 ```
 x_cpu = np.array([1, 2, 3])
-x_gpu_0 = cp.asarray(x_cpu)  # move the ndarray from host mem to GPU0 memeory.
+x_gpu_0 = cp.asarray(x_cpu)  # move the ndarray from Host memory to GPU0 memeory.
 ```
 
 We can also transfer data between GPUs. 
@@ -52,3 +52,13 @@ with cp.cuda.Device(1):
     x_gpu_1 = cp.asarray(x_gpu_0)  # move the ndarray to GPU0 to GPU1.
 ```
 In the past any communication between two GPUs had to go throgh the PCIe card. But now NVIDIA offeres a technology called NVLink. NVLink is a direct GPU-to-GPU interconnect that scales multi-GPU input/output (IO) within a node. This makes GPU-to-GPU transfer (D2D tranfer) much faster than GPU-to-Host (D2H transfer) or Host-to-GPU transfer (H2D transfer). 
+
+There are two ways to transfer data from the GPU memory to Host memory- ``cupy.ndarray.get()`` or ``cupy.asnumpy``. 
+
+```
+with cp.cuda.Device(0):
+    x_cpu = cp.asnumpy(x_gpu_0)  # move the array from GPU 0 back to the Host memory.
+
+with cp.cuda.Device(1):
+    x_cpu = x_gpu_1.get()  # move the array from GPU 1 back to the Host memory.
+```
