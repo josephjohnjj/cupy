@@ -75,3 +75,43 @@ def log_array(x):
                                  # numpy ndarray array reference is returned if x is in Host memory
     xp.log1p(xp.exp(-abs(x))) 
 ```
+
+## User Defined Kernels
+
+Kernels are functions that will be run on the GPU. CuPy provides easy ways to define three types of CUDA kernels: *elementwise kernels, reduction kernels* and *raw kernels*.
+
+### Elementwise Kernel
+A definition of an elementwise kernel consists of four parts: 
+1. An input argument list
+2. An output argument list
+3. A loop body code
+4. Kernel name.
+  
+A kernel that computes an elementwise  difference can be defined as follows:
+
+```
+element_diff = cp.ElementwiseKernel('float32 x, float32 y', 
+                                    'float32 z', 
+                                    'z = (x - y)', 
+                                    'element_diff')
+```
+
+### Reduction Kernel
+Reduction operation is a computation where we reduce the elements of an array into a single result.  We can use it by defining four parts of the kernel code:
+
+1. Identity value: This value is used for the initial value of reduction.
+2. Mapping expression: It is used for the pre-processing of each element to be reduced.
+3. Reduction expression: It is an operator to reduce the multiple mapped values. The special variables a and b are used for its operands.
+4. Post mapping expression: It is used to transform the resulting reduced values. The special variable a is used as its input. Output should be written to the output parameter.
+
+```
+reduction_kernel = cp.ReductionKernel(
+    'T x', # input param
+    'T y',  # output param
+    'x',  # map
+    'a + b',  # reduce
+    'y = a',  # post-reduction map
+    '0',  # identity value
+    'reduction_kernel'  # kernel name
+)
+```
