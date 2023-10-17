@@ -62,3 +62,16 @@ with cp.cuda.Device(0):
 with cp.cuda.Device(1):
     x_cpu = x_gpu_1.get()  # move the array from GPU 1 back to the Host memory.
 ```
+
+***
+
+## Device Agnostic Codes
+
+As cupy mimicks numpy we can build device agnostics codes. That is, we can make function calls to a data, without the knowledge of where they reside. The ``cupy.get_array_module()`` function in CuPy returns a reference to cupy if any of its arguments resides on a GPU and numpy otherwise.
+
+```
+def log_array(x):
+    xp = cp.get_array_module(x)  # cupy ndarray array reference is returned if x is in GPU memory
+                                 # numpy ndarray array reference is returned if x is in Host memory
+    xp.log1p(xp.exp(-abs(x))) 
+```
