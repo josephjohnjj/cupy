@@ -118,3 +118,15 @@ reduction_kernel = cp.ReductionKernel(
 
 ### Raw Kernel
 
+Raw Kernels are used to define kernels from raw CUDA source.
+
+```
+add_kernel = cp.RawKernel(r'''
+    extern "C" __global__
+    void my_add(const float* x1, const float* x2, float* y) 
+    {
+        int tid = blockDim.x * blockIdx.x + threadIdx.x;
+        y[tid] = x1[tid] + x2[tid];
+    }''', 'my_add')
+```
+
